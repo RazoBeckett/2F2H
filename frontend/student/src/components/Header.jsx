@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const storedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [darkMode, setDarkMode] = useState(storedTheme === "dark" || (!storedTheme && prefersDark));
 
   useEffect(() => {
     if (darkMode) {
