@@ -56,14 +56,14 @@ const Challenges = ({ setSidebarVisible }) => {
 
   const handleApply = (challenge) => {
     setSelectedChallenge(challenge);
-    setSidebarVisible(false); // Hide sidebar when modal opens
+    setSidebarVisible(false);
   };
 
   const closeModal = () => {
     setSelectedChallenge(null);
     setFormData({ fullName: "", email: "", contact: "", year: "" });
     setTicketId(null);
-    setSidebarVisible(true); // Show sidebar again when modal closes
+    setSidebarVisible(true);
   };
 
   const handleInputChange = (e) => {
@@ -95,9 +95,9 @@ const Challenges = ({ setSidebarVisible }) => {
   return (
     <div className="p-8 bg-white shadow-lg rounded-lg max-w-6xl mx-auto mt-5">
       <h2 className="text-3xl font-bold text-gray-900 mb-6">Coding Challenges</h2>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {challenges.map((challenge) => (
-          <div key={challenge.id} className="p-5 border rounded-lg shadow-sm bg-gray-50 flex items-center justify-between">
+          <div key={challenge.id} className="p-5 border rounded-lg shadow-sm bg-gray-50 flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-gray-200 rounded-full">{challenge.icon}</div>
               <div>
@@ -108,7 +108,7 @@ const Challenges = ({ setSidebarVisible }) => {
               </div>
             </div>
             {challenge.status === "Upcoming" && (
-              <button onClick={() => handleApply(challenge)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply</button>
+              <button onClick={() => handleApply(challenge)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition w-full md:w-auto mt-4 md:mt-0">Apply</button>
             )}
           </div>
         ))}

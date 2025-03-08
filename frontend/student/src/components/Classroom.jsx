@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BarChart, Folder, ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, X } from "lucide-react";
 
 const teacherNames = [
   "Amit Sharma", "Priya Patel", "Rahul Verma", "Neha Singh", "Vikram Joshi",
@@ -22,18 +22,27 @@ const Classroom = () => {
       subject: "Data Structures and Algorithms",
       teacher: "Manisha Gade",
       profile: "https://i.pravatar.cc/50?u=manisha",
-      hasMaterials: false,
+      hasMaterials: true,
+      materials: [
+        {
+          title: "DSA Notes",
+          file: "/DS-Algorithm.pdf", 
+        },
+      ],
     },
   ];
 
   const [joinedClasses, setJoinedClasses] = useState(storedClasses);
-  const [showJoinClass, setShowJoinClass] = useState(joinedClasses.length === 1);
+  const [showJoinClass, setShowJoinClass] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [activeTab, setActiveTab] = useState("Stream");
 
   useEffect(() => {
     sessionStorage.setItem("joinedClasses", JSON.stringify(joinedClasses));
   }, [joinedClasses]);
 
   const handleJoinClass = (classCode) => {
+    if (!classCode.trim()) return;
     const subject = getRandomItem(subjectNames);
     const newClass = {
       code: classCode,
@@ -42,6 +51,7 @@ const Classroom = () => {
       teacher: getRandomItem(teacherNames),
       profile: `https://i.pravatar.cc/50?u=${classCode}`,
       hasMaterials: false,
+      materials: [],
     };
 
     setJoinedClasses([...joinedClasses, newClass]);
@@ -51,22 +61,18 @@ const Classroom = () => {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold flex items-center gap-2">
-        {showJoinClass && joinedClasses.length > 1 && (
-          <ArrowLeft
-            size={28}
-            className="cursor-pointer text-gray-700 hover:text-gray-900"
-            onClick={() => setShowJoinClass(false)}
-          />
+        {showJoinClass && (
+          <ArrowLeft size={28} className="cursor-pointer text-gray-700 hover:text-gray-900" onClick={() => setShowJoinClass(false)} />
         )}
         My Classrooms
       </h1>
       <p className="text-gray-600">Manage your classrooms efficiently.</p>
 
-      {showJoinClass && <JoinClassroom onJoin={handleJoinClass} />}
-
-      {!showJoinClass && (
+      {showJoinClass ? (
+        <JoinClassroom onJoin={handleJoinClass} />
+      ) : (
         <>
-          <button
+          <button 
             className="mt-4 flex items-center bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
             onClick={() => setShowJoinClass(true)}
           >
@@ -76,70 +82,80 @@ const Classroom = () => {
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {joinedClasses.map((classroom, index) => (
-              <ClassroomCard key={index} classroom={classroom} />
+              <ClassroomCard key={index} classroom={classroom} onClick={() => setSelectedClass(classroom)} />
             ))}
           </div>
         </>
       )}
+
+      {selectedClass && (
+        <ClassroomModal classroom={selectedClass} onClose={() => setSelectedClass(null)} activeTab={activeTab} setActiveTab={setActiveTab} />
+      )}
     </div>
   );
 };
+
+const ClassroomModal = ({ classroom, onClose, activeTab, setActiveTab }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-bold">{classroom.name}</h2>
+          <X className="cursor-pointer text-gray-700 hover:text-gray-900" onClick={onClose} />
+        </div>
+        
+        <div className="mt-4 flex space-x-4 border-b pb-2">
+          {["Stream", "Classwork", "People"].map((tab) => (
+            <button key={tab} className={`pb-2 ${activeTab === tab ? "border-b-2 border-blue-500 font-bold" : "text-gray-600"}`} onClick={() => setActiveTab(tab)}>
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === "Stream" && <p className="mt-4 italic text-gray-600">No announcements yet.</p>}
+        {activeTab === "Classwork" && (
+          <div className="mt-4">
+            <h3 className="font-semibold">Class Materials</h3>
+            {classroom.hasMaterials ? (
+              <ul className="list-disc pl-5">
+                {classroom.materials.map((material, index) => (
+                  <li key={index}>
+                    <a href={material.file} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                      {material.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 italic">No materials uploaded yet.</p>
+            )}
+          </div>
+        )}
+        {activeTab === "People" && <p className="mt-4 font-medium">Instructor: {classroom.teacher}</p>}
+      </div>
+    </div>
+  );
+};
+
+const ClassroomCard = ({ classroom, onClick }) => (
+  <div onClick={onClick} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer">
+    <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+      <h2 className="text-lg font-semibold">{classroom.name}</h2>
+      <img src={classroom.profile} alt="Teacher" className="w-10 h-10 rounded-full border-2 border-white shadow-lg" />
+    </div>
+    <div className="p-4">
+      <p className="text-gray-700 font-medium">{classroom.subject}</p>
+      <p className="text-gray-500">{classroom.teacher}</p>
+    </div>
+  </div>
+);
 
 const JoinClassroom = ({ onJoin }) => {
   const [classCode, setClassCode] = useState("");
-
-  const handleJoin = () => {
-    if (classCode.trim()) {
-      onJoin(classCode);
-      setClassCode("");
-    }
-  };
-
   return (
-    <div className="p-5 flex flex-col sm:flex-row gap-3 items-center bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
-      <input
-        type="text"
-        placeholder="Enter Class Code"
-        value={classCode}
-        onChange={(e) => setClassCode(e.target.value)}
-        className="border p-2 rounded w-full sm:flex-1"
-      />
-      <button
-        onClick={handleJoin}
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-      >
-        Join Class
-      </button>
-    </div>
-  );
-};
-
-const ClassroomCard = ({ classroom }) => {
-  return (
-    <div className="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white p-4 flex justify-between items-center">
-        <h2 className="text-lg font-semibold">{classroom.name}</h2>
-        <img
-          src={classroom.profile}
-          alt="Teacher"
-          className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
-        />
-      </div>
-      <div className="p-4">
-        <p className="text-gray-700 dark:text-gray-300 font-medium">{classroom.subject}</p>
-        <p className="text-gray-500 dark:text-gray-400">{classroom.teacher}</p>
-      </div>
-      <div className="p-4 flex justify-between border-t">
-        <button className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1">
-          <BarChart size={20} /> Stats
-        </button>
-        <button className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1">
-          <Folder size={20} /> Files
-        </button>
-      </div>
-      {!classroom.hasMaterials && (
-        <p className="text-center text-gray-500 dark:text-gray-400 italic p-2">No materials uploaded</p>
-      )}
+    <div className="p-5 flex flex-col sm:flex-row gap-3 items-center bg-gray-100 rounded-lg shadow-md">
+      <input type="text" placeholder="Enter Class Code" value={classCode} onChange={(e) => setClassCode(e.target.value)} className="border p-2 rounded w-full sm:flex-1" />
+      <button onClick={() => onJoin(classCode)} className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">Join Class</button>
     </div>
   );
 };
