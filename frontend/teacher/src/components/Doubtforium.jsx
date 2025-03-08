@@ -26,7 +26,7 @@ const DoubtForum = () => {
   };
 
   return (
-    <div className="max-w-4xl mt-22 mx-auto bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-xl shadow-lg mt-8 ms-[450px]">
+    <div className="max-w-4xl mt-30 mx-auto bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-xl shadow-lg  ms-[450px]">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h2 className="text-4xl font-bold text-gray-900 dark:text-white">Doubt Forum</h2>
