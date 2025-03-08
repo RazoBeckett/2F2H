@@ -15,56 +15,123 @@ const Quizzes = () => {
   };
 
   return (
-    <div className="max-w-5xl mt-24 mx-auto bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg ml-80">
+    <div className="max-w-6xl mt-24 mx-auto p-8 ml-80">
       {/* Header Section */}
-      <header className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Quizzes</h2>
-        
-        {/* Add Quiz Button with Tooltip */}
-        <button
-          className="flex items-center bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-          onClick={handleCreateQuiz}
-          aria-label="Create a new quiz" // Added aria-label for accessibility
-          data-tip="Create a new quiz" // Tooltip for better user experience
-        >
-          <PlusCircle className="mr-2" /> Add Quiz
-        </button>
-        <Tooltip place="top" effect="solid" /> {/* Tooltip component */}
-      </header>
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+            <svg
+              className="w-6 h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Quizzes</h2>
+            <p className="text-gray-600 mt-1">
+              Create and manage your classroom quizzes
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {/* Responsive Table Container */}
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-300 dark:border-gray-700 rounded-lg shadow-md">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
-              <th className="border border-gray-300 dark:border-gray-700 p-4 text-left">ID</th>
-              <th className="border border-gray-300 dark:border-gray-700 p-4 text-left">Title</th>
-              <th className="border border-gray-300 dark:border-gray-700 p-4 text-left">Date</th>
-              <th className="border border-gray-300 dark:border-gray-700 p-4 text-left">Questions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {quizzes.map((quiz, index) => (
-              <tr
-                key={quiz.id}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-50 dark:bg-gray-900" : "bg-white dark:bg-gray-800"
-                } hover:bg-gray-200 dark:hover:bg-gray-700 transition-all`}
+      {/* Actions Bar */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg">
+              <svg
+                className="w-5 h-5 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <td className="border border-gray-300 dark:border-gray-700 p-4">{quiz.id}</td>
-                <td className="border border-gray-300 dark:border-gray-700 p-4">{quiz.title}</td>
-                <td className="border border-gray-300 dark:border-gray-700 p-4">{quiz.date}</td>
-                <td className="border border-gray-300 dark:border-gray-700 p-4">{quiz.questions}</td>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              <span className="text-sm font-medium text-gray-600">
+                Total Quizzes: {quizzes.length}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleCreateQuiz}
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow group"
+            data-tooltip-id="create-quiz-tooltip"
+            data-tooltip-content="Create a new quiz"
+          >
+            <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" />
+            <span className="font-medium">Create Quiz</span>
+          </button>
+          <Tooltip id="create-quiz-tooltip" />
+        </div>
+      </div>
+
+      {/* Quizzes Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Quiz ID
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Title
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Scheduled Date
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Questions
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Status
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {quizzes.map((quiz) => (
+                <tr
+                  key={quiz.id}
+                  className="hover:bg-gray-50 transition-colors duration-200"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      #{quiz.id.toString().padStart(3, "0")}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quiz.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quiz.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quiz.questions} Questions</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-800">
+                      Active
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
 };
 
-// Added PropTypes for type checking
 Quizzes.propTypes = {
   quizzes: PropTypes.arrayOf(
     PropTypes.shape({
