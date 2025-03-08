@@ -43,82 +43,135 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <>
       {/* Mobile Toggle Button */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50  text-white p-2 rounded-lg shadow-lg transition-transform duration-300 hover:bg-gray-700"
+        className="md:hidden fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg transition-all duration-300 hover:bg-gray-50 border border-gray-200"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Sidebar"
       >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {isOpen ? (
+          <X size={24} className="text-gray-700 transition-transform duration-300 transform hover:rotate-90" />
+        ) : (
+          <Menu size={24} className="text-gray-700 transition-transform duration-300 transform hover:scale-110" />
+        )}
       </button>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-xl p-6 transition-transform duration-300 z-40 
-          ${isOpen ? "translate-x-0" : "-translate-x-64"} md:translate-x-0 flex flex-col`}
+        className={`fixed top-0 left-0 h-full w-72 bg-white dark:bg-gray-800 shadow-xl transition-transform duration-300 z-40 
+          ${isOpen ? "translate-x-0" : "-translate-x-72"} md:translate-x-0 flex flex-col`}
       >
-        {/* Logo and Brand Name */}
-        <div className="flex items-center space-x-3 mb-6">
-          <img src="/logo-svg.svg" alt="Logo" className="w-16 h-16 rounded-full shadow-md" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">QuizMorphs</h2>
+        {/* Logo and Brand Section */}
+        <div className="px-6 py-8 border-b border-gray-100 dark:border-gray-700">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img 
+                src="/logo-svg.svg" 
+                alt="Logo" 
+                className="w-12 h-12 rounded-xl shadow-md transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">QuizMorphs</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Teacher Dashboard</p>
+            </div>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="space-y-2 flex-grow">
-          <NavLink
-            to="/create-classroom"
-            className={({ isActive }) =>
-              `flex items-center p-3 rounded-lg transition-all duration-300 ${
-                isActive
-                  ? " shadow-md"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`
-            }
-            aria-label="Create Classroom"
-          >
-            <PlusCircle className="mr-3" /> Create Classroom
-          </NavLink>
+        <nav className="flex-grow px-4 py-6 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+          {/* Primary Actions */}
+          <div className="mb-6 space-y-2">
+            <NavLink
+              to="/create-classroom"
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                }`
+              }
+            >
+              <PlusCircle className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span className="font-medium">Create Classroom</span>
+            </NavLink>
 
-          <NavLink
-            to="/manage-classrooms"
-            className={({ isActive }) =>
-              `flex items-center p-3 rounded-lg transition-all duration-300 ${
-                isActive
-                  ? "  shadow-md"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`
-            }
-            aria-label="Manage Classrooms"
-          >
-            <List className="mr-3" /> Manage Classrooms
-          </NavLink>
+            <NavLink
+              to="/manage-classrooms"
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                }`
+              }
+            >
+              <List className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span className="font-medium">Manage Classrooms</span>
+            </NavLink>
+          </div>
 
-          <NavLink to="/" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <Layout className="mr-3" /> Dashboard
-          </NavLink>
-          <NavLink to="/students" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <Users className="mr-3" /> Students
-          </NavLink>
-          <NavLink to="/quizzes" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <BookOpen className="mr-3" /> Quizzes
-          </NavLink>
-          <NavLink to="/leaderboard" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <Award className="mr-3" /> Leaderboard
-          </NavLink>
-          <NavLink to="/doubt-forum" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <MessageSquare className="mr-3" /> Doubts
-          </NavLink>
-          <NavLink to="/help" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <HelpCircle className="mr-3" /> Help
-          </NavLink>
-          <NavLink to="/settings" className="flex items-center p-3 rounded-lg hover:bg-gray-200">
-            <Settings className="mr-3" /> Settings
-          </NavLink>
+          {/* Main Navigation */}
+          <div className="space-y-1">
+            {[
+              { path: "/", icon: Layout, label: "Dashboard" },
+              { path: "/students", icon: Users, label: "Students" },
+              { path: "/quizzes", icon: BookOpen, label: "Quizzes" },
+              { path: "/leaderboard", icon: Award, label: "Leaderboard" },
+              { path: "/doubt-forum", icon: MessageSquare, label: "Doubts" },
+            ].map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                    isActive
+                      ? "bg-gray-50 text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <item.icon className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+                <span className="font-medium">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Bottom Navigation */}
+          <div className="pt-6 mt-6 border-t border-gray-100 dark:border-gray-700 space-y-1">
+            <NavLink
+              to="/help"
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  isActive
+                    ? "bg-gray-50 text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                }`
+              }
+            >
+              <HelpCircle className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span className="font-medium">Help Center</span>
+            </NavLink>
+
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  isActive
+                    ? "bg-gray-50 text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                }`
+              }
+            >
+              <Settings className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span className="font-medium">Settings</span>
+            </NavLink>
+          </div>
         </nav>
       </aside>
 
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
           aria-label="Close Sidebar"
         />
