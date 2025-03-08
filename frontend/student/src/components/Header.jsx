@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const storedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [darkMode, setDarkMode] = useState(storedTheme === "dark" || (!storedTheme && prefersDark));
 
   useEffect(() => {
     if (darkMode) {
@@ -19,8 +19,8 @@ const Header = () => {
   return (
     <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-900 shadow-md">
       {/* Left - Title */}
-      <h1 className="text-xl font-semibold text-gray-900 dark:text-white ms-7">
-        QuizMorphs
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white ms-7">
+      Quiz<span className="text-blue-600 font-bold">Morphs</span>
       </h1>
 
       {/* Right - Dark Mode Toggle + Profile */}

@@ -56,14 +56,14 @@ const Challenges = ({ setSidebarVisible }) => {
 
   const handleApply = (challenge) => {
     setSelectedChallenge(challenge);
-    setSidebarVisible(false); // Hide sidebar when modal opens
+    setSidebarVisible(false);
   };
 
   const closeModal = () => {
     setSelectedChallenge(null);
     setFormData({ fullName: "", email: "", contact: "", year: "" });
     setTicketId(null);
-    setSidebarVisible(true); // Show sidebar again when modal closes
+    setSidebarVisible(true);
   };
 
   const handleInputChange = (e) => {
@@ -95,9 +95,9 @@ const Challenges = ({ setSidebarVisible }) => {
   return (
     <div className="p-8 bg-white shadow-lg rounded-lg max-w-6xl mx-auto mt-5">
       <h2 className="text-3xl font-bold text-gray-900 mb-6">Coding Challenges</h2>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {challenges.map((challenge) => (
-          <div key={challenge.id} className="p-5 border rounded-lg shadow-sm bg-gray-50 flex items-center justify-between">
+          <div key={challenge.id} className="p-5 border rounded-lg shadow-sm bg-gray-50 flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-gray-200 rounded-full">{challenge.icon}</div>
               <div>
@@ -105,22 +105,25 @@ const Challenges = ({ setSidebarVisible }) => {
                 <p className="text-gray-600">{challenge.category} - <span className="font-medium">{challenge.difficulty}</span></p>
                 <p className="text-gray-500 text-sm">{challenge.date}</p>
                 <p className="text-gray-500 text-sm">{challenge.timeSpan}</p>
+                <span className={`px-3 py-1 text-sm font-semibold rounded-lg ${challenge.status === "Ongoing" ? "bg-blue-100 text-blue-700" : challenge.status === "Upcoming" ? "bg-green-100 text-green-700" : "bg-gray-300 text-gray-800"}`}>{challenge.status}</span>
+
               </div>
             </div>
             {challenge.status === "Upcoming" && (
-              <button onClick={() => handleApply(challenge)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply</button>
+              <button onClick={() => handleApply(challenge)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition w-full md:w-auto mt-4 md:mt-0">Apply</button>
             )}
           </div>
         ))}
       </div>
 
       {selectedChallenge && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
             <button onClick={closeModal} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"><X size={24} /></button>
             <h3 className="text-2xl font-bold text-gray-900">Apply for {selectedChallenge.title}</h3>
             <p className="text-gray-600">Date: {selectedChallenge.date}</p>
             <p className="text-gray-600">Duration: {selectedChallenge.timeSpan}</p>
+            <p className="text-gray-700 font-semibold">Status: {selectedChallenge.status}</p>
             <input type="text" name="fullName" placeholder="Full Name" className="w-full border p-2 mt-2" value={formData.fullName} onChange={handleInputChange} />
             <input type="email" name="email" placeholder="Email" className="w-full border p-2 mt-2" value={formData.email} onChange={handleInputChange} />
             <input type="text" name="contact" placeholder="Contact No" className="w-full border p-2 mt-2" value={formData.contact} onChange={handleInputChange} />
