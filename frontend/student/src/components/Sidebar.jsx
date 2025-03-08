@@ -23,7 +23,7 @@ const Sidebar = () => {
             <SidebarItem to="/" icon={<Layout size={20} />} label="Dashboard" />
             <SidebarItem to="/classroom" icon={<BookOpen size={20} />} label="Classrooms" />
             <SidebarItem to="/quizzes" icon={<FileText size={20} />} label="Quizzes" />
-            <SidebarItem to="/progress" icon={<BarChart size={20} />} label="Progress" />
+            {/* <SidebarItem to="/progress" icon={<BarChart size={20} />} label="Progress" /> */}
             <SidebarItem to="/challenges" icon={<Trophy size={20} />} label="Challenges" />
             <SidebarItem to="/announcements" icon={<Target size={20} />} label="Announcements" />
             <SidebarItem to="/rewards" icon={<Gift size={20} />} label="Rewards" />

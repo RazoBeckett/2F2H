@@ -10,6 +10,8 @@ import Leaderboard from "./components/Leaderboard";
 import Help from "./components/Help";
 import Challenges from "./components/Challenges";
 import StudSettings from "./components/StudSettings";
+import Rewards from "./components/Rewards";
+import Quizzes from "./components/quizzes";
 
 
 const App = () => {
@@ -48,6 +50,12 @@ const App = () => {
             <Route path="/help" element={<Help />} />
             <Route path="/challenges" element={<Challenges />} />
             <Route path="/studsettings" element={<StudSettings />} />
+            <Route path="/rewards" element={<Rewards />} />  
+            <Route path="/quizzes" element={<Quizzes />} />  
+
+
+            
+
           </Routes>
         </main>
       </div>
