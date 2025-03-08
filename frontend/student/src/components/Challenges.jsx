@@ -105,6 +105,8 @@ const Challenges = ({ setSidebarVisible }) => {
                 <p className="text-gray-600">{challenge.category} - <span className="font-medium">{challenge.difficulty}</span></p>
                 <p className="text-gray-500 text-sm">{challenge.date}</p>
                 <p className="text-gray-500 text-sm">{challenge.timeSpan}</p>
+                <span className={`px-3 py-1 text-sm font-semibold rounded-lg ${challenge.status === "Ongoing" ? "bg-blue-100 text-blue-700" : challenge.status === "Upcoming" ? "bg-green-100 text-green-700" : "bg-gray-300 text-gray-800"}`}>{challenge.status}</span>
+
               </div>
             </div>
             {challenge.status === "Upcoming" && (
@@ -121,6 +123,7 @@ const Challenges = ({ setSidebarVisible }) => {
             <h3 className="text-2xl font-bold text-gray-900">Apply for {selectedChallenge.title}</h3>
             <p className="text-gray-600">Date: {selectedChallenge.date}</p>
             <p className="text-gray-600">Duration: {selectedChallenge.timeSpan}</p>
+            <p className="text-gray-700 font-semibold">Status: {selectedChallenge.status}</p>
             <input type="text" name="fullName" placeholder="Full Name" className="w-full border p-2 mt-2" value={formData.fullName} onChange={handleInputChange} />
             <input type="email" name="email" placeholder="Email" className="w-full border p-2 mt-2" value={formData.email} onChange={handleInputChange} />
             <input type="text" name="contact" placeholder="Contact No" className="w-full border p-2 mt-2" value={formData.contact} onChange={handleInputChange} />
