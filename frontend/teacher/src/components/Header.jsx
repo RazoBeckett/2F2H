@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 
+// Function to get initial theme preference
+const getInitialTheme = () => {
+  if (typeof window !== "undefined") {
+    const storedTheme = localStorage.getItem("theme");
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return storedTheme === "dark" || (!storedTheme && systemTheme);
+  }
+  return false;
+};
+
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
+  const [darkMode, setDarkMode] = useState(getInitialTheme);
   const [scrollY, setScrollY] = useState(0);
   const [hidden, setHidden] = useState(false);
 
-  // Handle Theme Change
+  // Apply theme on mount & update
   useEffect(() => {
+    console.log("Dark mode:", darkMode); // Debugging line
     if (darkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -34,7 +45,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-5 left-10 md:left-72 right-5 max-w-[calc(100%-2.5rem)] md:max-w-[calc(100%-18rem)] z-50 flex justify-between items-center px-8 py-4 bg-white/90 backdrop-blur-md dark:bg-gray-900/90 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-800 ${
+      className={`fixed top-5 left-10 ml-5 md:left-72 right-5 max-w-[calc(100%-2.5rem)] md:max-w-[calc(100%-18rem)] z-50 flex justify-between items-center px-8 py-4 bg-white/90 backdrop-blur-md dark:bg-gray-900/90 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-800 ${
         hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
       }`}
     >

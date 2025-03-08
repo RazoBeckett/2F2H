@@ -41,7 +41,7 @@ const CreateClassroom = () => {
   };
 
   return (
-    <div className="mt-24 ml-64 p-8 bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg border border-gray-100">
+    <div className="mt-24 ml-70 p-8 bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg border border-gray-100">
       {!showForm ? (
         <div className="text-center max-w-md mx-auto">
           <div className="mb-8">
