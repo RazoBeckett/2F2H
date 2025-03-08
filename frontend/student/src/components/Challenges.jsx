@@ -115,7 +115,7 @@ const Challenges = ({ setSidebarVisible }) => {
       </div>
 
       {selectedChallenge && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
             <button onClick={closeModal} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"><X size={24} /></button>
             <h3 className="text-2xl font-bold text-gray-900">Apply for {selectedChallenge.title}</h3>
